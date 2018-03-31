@@ -1,12 +1,9 @@
 # Lets-talk 4
-
-## TO DO
-1. Have the API pick up the webcam stream
-2. Have the API serve the webcam stream to clients
-3. Have the Client listen to the webcam stream
-
-## Nice to Have
-1. Webcam: Make the stream more viewable
+## Operations
+clone this repo
+clone api, robot, ui into this repo
+build docker image
+run docker image 
 
 ## Robot
 ### Connection to the robot
