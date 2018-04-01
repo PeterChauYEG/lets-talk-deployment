@@ -89,10 +89,25 @@ open -a Google\ Chrome --args --disable-web-security --user-data-dir
 ```
 
 ## docker
+```
 docker build -t peterchau/lets-talk .
 docker run -p 8080:8080 -d peterchau/lets-talk
+```
 
 ## Deployment
-We are going to deploy the ui and the api to the compute engine. We are going to use a container on it to handle our code.
+deploy to google compute kubernates:
+```
+kubectl run lets-talk --image peterchau/lets-talk:latest --port 8080
+```
 
-First we need to combine the api and ui, then dockerize the api and ui.
+Expose the deployment:
+```
+kubectl expose deployment lets-talk --type "LoadBalancer"
+```
+
+Get the external ip with:
+```
+kubectl get service lets-talk
+```
+
+delete a deployment with: `kubectl delete deployment lets-talk`
