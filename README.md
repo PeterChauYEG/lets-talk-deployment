@@ -25,8 +25,8 @@ ffserver -f /etc/ffserver.conf & ffmpeg -v verbose -r 5 -s 600x480 -f video4linu
 Watch at: `http://192.168.0.22:9090/test.mjpg`
 
 Stop it with:
-netstat -tulnap
-sudo fuser -k 9090/tcp
+`netstat -tulnap`
+`sudo fuser -k 9090/tcp`
 
 The best resolution I can get is 320x240 with a 1 sec delay
 
@@ -60,54 +60,46 @@ NoDefaults
 ```
 
 ### web cam script /usr/sbin/webcam.sh
-```
-ffserver -f /etc/ffserver.conf & ffmpeg -v verbose -r 5 -s 600x480 -f video4linux2 -i /dev/video0 http://localhost:9090/feed1.ffm
-```
+`ffserver -f /etc/ffserver.conf & ffmpeg -v verbose -r 5 -s 600x480 -f video4linux2 -i /dev/video0 http://localhost:9090/feed1.ffm`
 
 remember to give it permissions to run: `sudo chmod +x /usr/sbin/webcam.sh`
 
 run with: `/usr/sbin/webcam.sh`
 
 ### drivetrain script /usr/sbin/drivetrain.sh
-```
-cd /home/pi/robot && npm start
-```
+`cd /home/pi/robot && npm start`
 
 remember to give it permissions to run: `sudo chmod +x /usr/sbin/drivetrain.sh`
 
 run with: `/usr/sbin/drivetrain.sh`
 
 ## CORS problems
-open chrome with cors disabled:
-```
-open -a Google\ Chrome --args --disable-web-security --user-data-dir
-```
+open chrome with cors disabled: `open -a Google\ Chrome --args --disable-web-security --user-data-dir`
 
-### ngrok
-```
-./ngrok http -region us -subdomain=lets-talk 9090
-```
+### ngrok video stream
+`./ngrok http -region us -subdomain=lets-talk 9090`
 
 ## docker
-```
-docker build -t peterchau/lets-talk .
-docker run -p 8080:8080 -d peterchau/lets-talk
-```
+Build image:
+`docker build -t peterchau/lets-talk .`
+
+Run image:
+`docker run -p 8080:8080 -d peterchau/lets-talk`
+
+tag the image:
+`docker tag peterchau/lets-talk peterchau/lets-talk:2`
+
+push image to dockerhub:
+`docker push peterchau/lets-talk`
 
 ## Deployment
-deploy to google compute kubernates:
-```
-kubectl run lets-talk --image peterchau/lets-talk:latest --port 8080
-```
+Create a kubernetes cluster: `gcloud container clusters create lets-talk`
+Get auth credentials: `gcloud container clusters get-credentials lets-talk`
 
-Expose the deployment:
-```
-kubectl expose deployment lets-talk --type "LoadBalancer"
-```
+deploy to google compute kubernates: `kubectl run lets-talk --image peterchau/lets-talk:latest --port 8080`
 
-Get the external ip with:
-```
-kubectl get service lets-talk
-```
+Expose the deployment: `kubectl expose deployment lets-talk --type "LoadBalancer"`
+
+Get the external ip with: `kubectl get service lets-talk`
 
 delete a deployment with: `kubectl delete deployment lets-talk`
