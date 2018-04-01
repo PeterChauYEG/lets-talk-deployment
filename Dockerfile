@@ -3,34 +3,25 @@ FROM node:carbon
 # Create ui directory
 WORKDIR /usr/src/ui
 
-# Install ui dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY ui/package*.json ./
+# Clone UI repository
+RUN git clone https://northwest69@bitbucket.org/laboratoryone/ui.git .
 
-RUN npm install
-# If you are building your code for production
-# RUN npm install --only=production
+# Install the production node modules
+RUN npm install --only=production
 
-# Bundle ui source
-COPY ui/ ./
+# Build the UI into it's bundle which will be served by the API
+RUN npm run build
 
-CMD [ "npm", "run build" ]
+# -----------
 
 # Create api directory
 WORKDIR ../api
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY api/package*.json ./
+# Clone api repository
+RUN git clone https://northwest69@bitbucket.org/laboratoryone/lets-talk-api.git .
 
-RUN npm install
-# If you are building your code for production
-# RUN npm install --only=production
-
-# Bundle app source
-COPY api/ ./
+# Install the production node modules
+RUN npm install --only=production
 
 EXPOSE 8080
 

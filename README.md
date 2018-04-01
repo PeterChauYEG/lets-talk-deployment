@@ -3,7 +3,7 @@
 clone this repo
 clone api, robot, ui into this repo
 build docker image
-run docker image 
+run docker image
 
 ## Robot
 ### Connection to the robot
@@ -90,7 +90,7 @@ open -a Google\ Chrome --args --disable-web-security --user-data-dir
 
 ## docker
 docker build -t peterchau/lets-talk .
-docker run -p 8080:8080 -d peterchau/lets-talk docker build -t peterchau/lets-talk .
+docker run -p 8080:8080 -d peterchau/lets-talk
 
 ## Deployment
 We are going to deploy the ui and the api to the compute engine. We are going to use a container on it to handle our code.
