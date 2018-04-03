@@ -80,11 +80,23 @@ open chrome with cors disabled: `open -a Google\ Chrome --args --disable-web-sec
 `./ngrok http -region us -subdomain=lets-talk 9090`
 
 ## docker
+Environment Variables:
+create a copy of the `env.list.template` as `env.list` and populate with your variables.
+
 Build image:
 `docker build -t peterchau/lets-talk .`
 
+Build image without cache:
+`docker build -no-cache -t peterchau/lets-talk .`
+
 Run image:
 `docker run -p 8080:8080 -d peterchau/lets-talk`
+
+Run image with env variables (development):
+`docker run -p 8080:8080 --env-file ./development.list -d peterchau/lets-talk`
+
+Run image with env variables (production):
+`docker run -p 8080:8080 --env-file ./production.list -d peterchau/lets-talk`
 
 tag the image:
 `docker tag peterchau/lets-talk peterchau/lets-talk:2`
