@@ -105,13 +105,20 @@ push image to dockerhub:
 `docker push peterchau/lets-talk`
 
 ## Deployment
-Create a kubernetes cluster: `gcloud container clusters create lets-talk`
-Get auth credentials: `gcloud container clusters get-credentials lets-talk`
+### Development
+1. Setup your cluster by copying `template.yaml` to `development.yaml` and setting the environment variables.
+2. Start minikube: `minikube start`
+3. Create the cluster: `kubectl create -f development.yaml`
+4. Expose the deployment: `kubectl expose deployment lets-talk --type "LoadBalancer"`
+5. get the ip with: `minikube service lets-talk --url`
+6. delete a deployment with: `kubectl delete deployment lets-talk`
+7. delete a service with: `kubectl delete service lets-talk`
 
-deploy to google compute kubernates: `kubectl run lets-talk --image peterchau/lets-talk:latest --port 8080`
-
-Expose the deployment: `kubectl expose deployment lets-talk --type "LoadBalancer"`
-
-Get the external ip with: `kubectl get service lets-talk`
-
-delete a deployment with: `kubectl delete deployment lets-talk`
+### Production
+1. Create a kubernetes cluster: `gcloud container clusters create lets-talk`
+2. Get auth credentials: `gcloud container clusters get-credentials lets-talk`
+3. deploy to google compute kubernates: `kubectl run lets-talk --image peterchau/lets-talk:latest --port 8080`
+4. Expose the deployment: `kubectl expose deployment lets-talk --type "LoadBalancer"`
+5. Get the external ip with: `kubectl get service lets-talk`
+6. delete a deployment with: `kubectl delete deployment lets-talk`
+7. delete a service with: `kubectl delete service lets-talk`

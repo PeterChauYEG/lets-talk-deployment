@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: lets-talk
+    labels:
+        app: lets-talk
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: lets-talk
+  template:
+    metadata:
+      labels:
+        app: lets-talk
+    spec:
+      containers:
+      - name: lets-talk
+        image: peterchau/lets-talk:latest
+        ports:
+          - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        - name: REACT_APP_STREAM
+          value: "http://192.168.0.22:9090/test.mjpg"
+        - name: REACT_APP_WEBSOCKET
+          value: "http://localhost:8080"
