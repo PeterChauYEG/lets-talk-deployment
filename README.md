@@ -1,9 +1,7 @@
 # Lets-talk 4
-## Operations
-clone this repo
-clone api, robot, ui into this repo
-build docker image
-run docker image
+## Setup
+1. clone this repo
+2. clone api, ui into this repo
 
 ## Robot
 ### Connection to the robot
@@ -13,15 +11,18 @@ password: whatsmypurpose
 ### Startup
 1. turn on robot power
 2. ssh in to the robot
-3. start robot standalone: `cd lets-talk-robot && npm start`
+3. start robot drivetrain: `/usr/sbin/drivetrain.sh`
+4. start Video Stream: `/usr/sbin/webcam.sh`
 4. point your browser to: `lets-talk.local:8080` || `192.168.0.22:8080`
 
-### Webcam
-Start ffserver and ffmpeg:
-```
-ffserver -f /etc/ffserver.conf & ffmpeg -v verbose -r 5 -s 600x480 -f video4linux2 -i /dev/video0 http://localhost:9090/feed1.ffm
-```
+### drivetrain script /usr/sbin/drivetrain.sh
+`cd /home/pi/robot && npm start`
 
+remember to give it permissions to run: `sudo chmod +x /usr/sbin/drivetrain.sh`
+
+copy the `.env.template` to `.env` and set the environment variables
+
+### Webcam
 Watch at: `http://192.168.0.22:9090/test.mjpg`
 
 Stop it with:
@@ -30,7 +31,7 @@ Stop it with:
 
 The best resolution I can get is 320x240 with a 1 sec delay
 
-### ffserver config /etc/ffserver.conf
+#### ffserver config /etc/ffserver.conf
 ```
 HTTPPort 9090
 HTTPBindAddress 0.0.0.0
@@ -59,44 +60,26 @@ NoDefaults
 </Stream>
 ```
 
-### web cam script /usr/sbin/webcam.sh
+#### web cam script /usr/sbin/webcam.sh
 `ffserver -f /etc/ffserver.conf & ffmpeg -v verbose -r 5 -s 600x480 -f video4linux2 -i /dev/video0 http://localhost:9090/feed1.ffm`
 
 remember to give it permissions to run: `sudo chmod +x /usr/sbin/webcam.sh`
 
-run with: `/usr/sbin/webcam.sh`
+#### ngrok video stream
+Create an introspective tunnel out into the internet: `./ngrok http -region us -subdomain=lets-talk 9090`
 
-### drivetrain script /usr/sbin/drivetrain.sh
-`cd /home/pi/robot && npm start`
+## Development
+### docker
+Currently, we are only able to develop the system using docker or node, not Kubernetes. This is because we are unable to direct local traffic from minikube to LAN.
 
-remember to give it permissions to run: `sudo chmod +x /usr/sbin/drivetrain.sh`
-
-run with: `/usr/sbin/drivetrain.sh`
-
-## CORS problems
-open chrome with cors disabled: `open -a Google\ Chrome --args --disable-web-security --user-data-dir`
-
-### ngrok video stream
-`./ngrok http -region us -subdomain=lets-talk 9090`
-
-## docker
 Environment Variables:
 create a copy of the `env.list.template` as `env.list` and populate with your variables.
 
-Build image:
-`docker build -t peterchau/lets-talk .`
-
-Build image without cache:
-`docker build -no-cache -t peterchau/lets-talk .`
-
-Run image:
-`docker run -p 8080:8080 -d peterchau/lets-talk`
+Build image without cache and set the build time variable:
+`docker build --build-arg REACT_APP_STREAM=http://192.168.0.22:9090/test.mjpg --build-arg REACT_APP_WEBSOCKET=http://192.168.0.19:8080 --no-cache -t peterchau/lets-talk .`
 
 Run image with env variables (development):
 `docker run -p 8080:8080 --env-file ./development.list -d peterchau/lets-talk`
-
-Run image with env variables (production):
-`docker run -p 8080:8080 --env-file ./production.list -d peterchau/lets-talk`
 
 tag the image:
 `docker tag peterchau/lets-talk peterchau/lets-talk:2`
@@ -106,7 +89,9 @@ push image to dockerhub:
 
 ## Deployment
 ### Development
-1. Setup your cluster by copying `template.yaml` to `development.yaml` and setting the environment variables.
+Test that your Kubernetes cluster works as desired. You won't beable to interact with the robot. This is a test to verify that you've setup the cluster correctly.
+
+1. Setup your cluster's environment variables in `deployment.yaml`.
 2. Start minikube: `minikube start`
 3. Create the cluster: `kubectl create -f development.yaml`
 4. Expose the deployment: `kubectl expose deployment lets-talk --type "LoadBalancer"`
@@ -122,3 +107,7 @@ push image to dockerhub:
 5. Get the external ip with: `kubectl get service lets-talk`
 6. delete a deployment with: `kubectl delete deployment lets-talk`
 7. delete a service with: `kubectl delete service lets-talk`
+
+## Troubleshooting
+### CORS problems
+open chrome with cors disabled: `open -a Google\ Chrome --args --disable-web-security --user-data-dir`

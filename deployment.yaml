@@ -1,11 +1,11 @@
-apiVersion: apps/v1
 kind: Deployment
+apiVersion: apps/v1
 metadata:
     name: lets-talk
     labels:
         app: lets-talk
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: lets-talk
@@ -23,6 +23,6 @@ spec:
         - name: PORT
           value: "8080"
         - name: REACT_APP_STREAM
-          value: "http://192.168.0.22:9090/test.mjpg"
+          value: "http://lets-talk.ngrok.io/test.mjpg"
         - name: REACT_APP_WEBSOCKET
           value: "http://localhost:8080"
