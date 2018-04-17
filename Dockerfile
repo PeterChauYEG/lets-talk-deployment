@@ -12,7 +12,7 @@ ENV REACT_APP_WEBSOCKET=$REACT_APP_WEBSOCKET
 WORKDIR /usr/src/ui
 
 # Clone UI repository
-RUN git clone https://northwest69@bitbucket.org/laboratoryone/ui.git .
+RUN git clone https://github.com/PeterChauYEG/lets-talk-client .
 
 # Install the production node modules
 RUN npm install --only=production
@@ -26,7 +26,7 @@ RUN npm run build
 WORKDIR ../api
 
 # Clone api repository
-RUN git clone https://northwest69@bitbucket.org/laboratoryone/lets-talk-api.git .
+RUN git clone https://github.com/PeterChauYEG/lets-talk-api .
 
 # Install the production node modules
 RUN npm install --only=production
