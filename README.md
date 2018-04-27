@@ -3,17 +3,25 @@
 1. clone this repo
 
 ## Development
-### docker
+### db
+We need a db to store our data.
+
+Start the instance as a daemon:
+`docker run --name lets-talk-mongo -d mongo`
+
+After running the api + client, connect to this container and check the mongo details with: `env`
+
+### api + client
 Currently, we are only able to develop the system using docker or node, not Kubernetes. This is because we are unable to direct local traffic from minikube to LAN.
 
 Environment Variables:
-create a copy of the `env.list.template` as `env.list` and populate with your variables.
+create a copy of the `env.list.template` as `development.list` and populate with your variables.
 
 Build image without cache and set the build time variable:
-`docker build --build-arg REACT_APP_STREAM=http://192.168.0.22:9090/test.mjpg --build-arg REACT_APP_WEBSOCKET=http://192.168.0.19:8080 --no-cache -t peterchau/lets-talk .`
+`docker build --build-arg REACT_APP_STREAM=http://192.168.0.22:9090/test.mjpg --build-arg REACT_APP_WEBSOCKET=http://192.168.0.21:8080 --no-cache -t peterchau/lets-talk .`
 
 Run image with env variables (development):
-`docker run -p 8080:8080 --env-file ./development.list -d peterchau/lets-talk`
+`docker run --link lets-talk-mongo:mongo -p 8080:8080 --env-file ./development.list -d peterchau/lets-talk`
 
 tag the image:
 `docker tag peterchau/lets-talk peterchau/lets-talk:2`
