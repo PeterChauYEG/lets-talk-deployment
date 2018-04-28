@@ -3,6 +3,12 @@
 1. clone this repo
 
 ## Development
+### Inmemory store
+We need a store for our sessions.
+
+Start the instance as a daemon:
+`docker run --name lets-talk-redis -d redis`
+
 ### db
 We need a db to store our data.
 
@@ -21,7 +27,7 @@ Build image without cache and set the build time variable:
 `docker build --build-arg REACT_APP_STREAM=http://192.168.0.22:9090/test.mjpg --build-arg REACT_APP_API=http://192.168.0.21:8080 --no-cache -t peterchau/lets-talk .`
 
 Run image with env variables (development):
-`docker run --link lets-talk-mongo:mongo -p 8080:8080 --env-file ./development.list -d peterchau/lets-talk`
+`docker run --name lets-talk --link lets-talk-mongo:mongo --link lets-talk-redis:redis -p 8080:8080 --env-file ./development.list -d peterchau/lets-talk`
 
 tag the image:
 `docker tag peterchau/lets-talk peterchau/lets-talk:2`
