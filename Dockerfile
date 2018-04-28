@@ -2,11 +2,11 @@ FROM node:carbon
 
 # Default args
 ARG REACT_APP_STREAM=http://192.168.0.22:9090/test.mjpg
-ARG REACT_APP_WEBSOCKET=http://192.168.0.19:8080
+ARG REACT_APP_API=http://192.168.0.21:8080
 
-# Default environment variables
+# Use environment variables
 ENV REACT_APP_STREAM=$REACT_APP_STREAM
-ENV REACT_APP_WEBSOCKET=$REACT_APP_WEBSOCKET
+ENV REACT_APP_API=$REACT_APP_API
 
 # Create ui directory
 WORKDIR /usr/src/ui

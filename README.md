@@ -18,7 +18,7 @@ Environment Variables:
 create a copy of the `env.list.template` as `development.list` and populate with your variables.
 
 Build image without cache and set the build time variable:
-`docker build --build-arg REACT_APP_STREAM=http://192.168.0.22:9090/test.mjpg --build-arg REACT_APP_WEBSOCKET=http://192.168.0.21:8080 --no-cache -t peterchau/lets-talk .`
+`docker build --build-arg REACT_APP_STREAM=http://192.168.0.22:9090/test.mjpg --build-arg REACT_APP_API=http://192.168.0.21:8080 --no-cache -t peterchau/lets-talk .`
 
 Run image with env variables (development):
 `docker run --link lets-talk-mongo:mongo -p 8080:8080 --env-file ./development.list -d peterchau/lets-talk`
